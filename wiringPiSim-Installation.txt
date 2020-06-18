@@ -1,0 +1,76 @@
+wiringPiSim - die wiringPiSimulation
+
+1) Entpacken der ZIP-Datei im Projektverzeichnis
+   Das Archiv besteht aus 5 Dateien:
+     temp_simulation.py  - GUI-Applikation um die Temperatur zu setzen
+	 ---
+	 wiringPiSim.h - Ersatz für wiringPi.h
+ 	 wiringPiSPISim.h - Ersatz für wiringPiSPI.h
+	 
+	 libwiringPiSim.a - Ersatz für die Funktionsbibliothek
+	 
+	 wiringPiSim.c - Quellcode der Bibliothek
+	 
+1A) Bibliothek selbst erzeugen
+   - Quellcode der Bibliothek kompilieren mit
+      gcc -Wall -c wiringPiSim.c
+
+   - Bibliothek zusammenfügen mit
+      ar -rcs libwiringPiSim.a wiringPiSim.o
+	 
+2) Die Python-GUI startbar machen
+   - Installation der PyQt5-Bibliothek.
+     Führen Sie dazu folgendes Kommando auf der Kommandozeile aus:
+	 
+	  sudo apt install python3-qtpy
+
+     und bestätigen Sie die Installation mit J
+	 
+3) Starten GUI-Anwendung temp_simulation.py
+   - Öffnen Sie ein Terminal
+   - Wechseln Sie in das Projektverzeichnis
+   - Starten Sie die GUI-Anwendung mithilfe des Python3 (!) Interpreters   
+
+      python3 temp_simulation.py
+
+     oder 
+      python3 temp_simulation.py &
+	  
+	  (Wenn Sie das Terminal während der Laufzeit
+	   der GUI-Anwendung noch anderweitig nutzen wollen)
+	 
+-----
+4) Unterschiede bei der Erstellung von C-Applikationen
+   
+   a) Anstelle der Include-Direktiven:
+      #include <wiringPi.h>
+	  #include <wiringPiSPI.h>
+	  
+	  müssen
+      #include "wiringPiSim.h"
+	  #include "wiringPiSPISim.h"
+	  
+	  verwendet werden.
+	  ACHTUNG: Mit " anstelle von <>, da sich die Include-Datei
+	           im Projektverzeichnis befindet.
+			   
+   b) Anstelle des folgenden Build-Aufrufs:
+      (beispielhaft für eine Quelldatei die v1.c heißt)
+	  
+	   gcc -o v1 -Wall v1.c -lwiringPi
+	  
+	  muss folgendes verwendet werden:
+	  
+	   gcc -o v1 -Wall v1.c -L. -lwiringPiSim
+   
+      Hinweis: Auch wenn die Datei eigentlich libwiringPiSim.a 
+	           heißt, wird -lwiringPiSim verwendet.
+	
+	  Hinweis: Der Build-Schalter -L gibt an, wo sich
+	           die Bibliothek libwiringPiSim.a befindet.
+			   Im Beispiel das aktuelle Verzeichnis, indem
+			   der gcc-Aufruf stattfindet
+
+5) Um Ihr Programm mit dem GUI-Temperatursensor zu testen, sollte
+   dieser am besten vor Ihrem Programm gestartet werden.
+   
